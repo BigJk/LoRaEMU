@@ -1,0 +1,40 @@
+{
+  "name": "loraemu-frontend",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --emptyOutDir",
+    "build-dev": "vite build --mode development --emptyOutDir",
+    "watch": "vite build --watch --emptyOutDir",
+    "preview": "vite preview",
+    "format-all": "prettier --write ./src/app/",
+    "format-check": "prettier --check ./src/app/"
+  },
+  "author": "BigJk",
+  "license": "MIT",
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^3.2.0",
+    "@types/d3": "^7.4.0",
+    "@vicons/ionicons5": "^0.12.0",
+    "@vitejs/plugin-vue": "^3.2.0",
+    "apexcharts": "^3.37.1",
+    "d3": "^7.8.2",
+    "d3-drag": "^3.0.0",
+    "leaflet": "^1.9.3",
+    "lodash-es": "^4.17.21",
+    "naive-ui": "^2.34.2",
+    "prettier": "2.7.0",
+    "pubsub-js": "^1.9.4",
+    "reconnecting-websocket": "^4.4.0",
+    "tachyons": "^4.12.0",
+    "vfonts": "^0.0.3",
+    "vite": "^3.2.5",
+    "vue": "^3.2.45",
+    "vue-json-viewer": "^3.0.4",
+    "vue-simple-context-menu": "^4.0.4",
+    "vue-winbox": "^0.2.1",
+    "vue3-apexcharts": "^1.4.1"
+  }
+}

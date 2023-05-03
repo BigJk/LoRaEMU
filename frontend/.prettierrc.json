@@ -1,0 +1,14 @@
+{
+  "printWidth": 150,
+  "useTabs": true,
+  "jsxSingleQuote": true,
+  "singleQuote": true,
+  "tabWidth": 4,
+  "importOrder": [
+    "^(?!/).*.css$",
+    "^/assets/.*$",
+    "^/app/.*$"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}

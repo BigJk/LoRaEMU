@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang='en' class='h-100'>
+<head>
+	<meta charset='UTF-8'>
+	<title>LoRaEMU</title>
+</head>
+<body class='h-100 sans-serif overflow-hidden'>
+<div id='app' class='h-100 flex flex-column overflow-hidden'>
+	<div class='flex-shrink-0 relatie ph3 white-90 flex items-center justify-between bg-dark-blue' style='height: 51px;'>
+		<div class='flex items-center'>
+			<img src='assets/images/sound-wave.svg' height='32' alt='' class='mr2' style='filter: invert(96%) sepia(100%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);'>
+			<span>LoRa<b>EMU</b></span>
+		</div>
+		<div class='f7 white-70'>
+			<span class='b white' id='running-for'>...</span>'s elapsed
+		</div>
+	</div>
+
+	<div ref='simContainer'
+		 class='overflow-hidden noselect flex pl4 items-center bg-black-05 bb b--black-10'
+		 style='outline: none; height: calc(100% - 51px - 35px);'
+		 tabindex='0'>
+
+		<div class='flex flex-column items-center justify-center' style='aspect-ratio: 1 / 1; max-width: 100%; height: 90%;'>
+			<div class='flex-shrink-0 white w-100 flex items-center justify-between ph3 bg-dark-blue' style='height: 35px'>
+				Simulation
+				<n-tooltip :style="{ width: '300px', backgroundColor: '#023047' }" trigger="hover" placement="bottom-end" :show-arrow="false">
+					<template #trigger>
+						<span class='pl5'>?</span>
+					</template>
+					<shortcut-legend-tooltip></shortcut-legend-tooltip>
+				</n-tooltip>
+			</div>
+			<div ref="sim" class='flex-shrink-0 relative bg-black-05 bl br bb bw1 b--black-10 w-100' style='aspect-ratio: 1 / 1; font-family: monospace;'>
+				<div
+					id='sim-bg'
+					class='absolute'
+					:style='{ backgroundImage: "url(\"/api/background\")"}'
+					style='background-repeat: no-repeat; z-index: -1; width: calc(100% - 2 * 35px); height: calc(100% - 2 * 35px); top: 35px; left: 35px'>
+				</div>
+				<svg></svg>
+			</div>
+		</div>
+
+		<!-- context menus -->
+
+		<vue-simple-context-menu
+			element-id='node-context-menu'
+			:options="[{name:'Edit'}, {name:'Delete'}]"
+			ref='nodeContext'
+			@option-clicked='nodeOptionClicked'>
+		</vue-simple-context-menu>
+
+		<vue-simple-context-menu
+			element-id='sim-context-menu'
+			:options="[{name:'Create Node'}, {name: 'Create Multiple Nodes'}]"
+			ref='simContext'
+			@option-clicked='simOptionClicked'>
+		</vue-simple-context-menu>
+	</div>
+
+	<!--
+
+		Windows
+
+	-->
+
+	<!-- Event Window Disabled for now: <window-events></window-events> -->
+
+	<window-selected-node :selected-id='selectedId'></window-selected-node>
+	<window-mobility></window-mobility>
+	<window-stats></window-stats>
+	<window-config></window-config>
+	<window-mobility-creator :selected-id='selectedId'></window-mobility-creator>
+
+	<vue-win-box
+		ref='editNodeWindow'
+		:options="{ title: '', class: ['white', 'no-min', 'no-max', 'no-full'], x: 'center', y: 'center', width: '800px', height: '360px', hidden: true, onclose: this.closeCreateNode  }"
+	>
+		<div class='pa3'>
+			<n-form
+				ref='createNodeForm'
+				:model='editNode'
+				:rules='editNodeRules'
+			>
+				<n-grid :span='24' :x-gap='10'>
+					<n-form-item-gi v-if='showCreate' :span='24' label='Node ID' path='id'>
+						<n-input v-model:value='editNode.id' placeholder='Node ID'></n-input>
+					</n-form-item-gi>
+					<n-form-item-gi :span='8' label='X (km)' path='x'>
+						<n-input-number v-model:value='editNode.x' :step='0.1' placeholder='X Pos'></n-input-number>
+					</n-form-item-gi>
+					<n-form-item-gi :span='8' label='Y (km)' path='y'>
+						<n-input-number v-model:value='editNode.y' :step='0.1' placeholder='Y Pos'></n-input-number>
+					</n-form-item-gi>
+					<n-form-item-gi :span='8' label='Z (km)' path='z'>
+						<n-input-number v-model:value='editNode.z' :step='0.1' placeholder='Z Pos'></n-input-number>
+					</n-form-item-gi>
+					<n-form-item-gi :span='8' label='TX Antenna Gain' path='txGain'>
+						<n-input-number v-model:value='editNode.txGain' placeholder='TX Gain'></n-input-number>
+					</n-form-item-gi>
+					<n-form-item-gi :span='8' label='RX Antenna Sensitivity' path='rxSens'>
+						<n-input-number v-model:value='editNode.rxSens' placeholder='RX Sensitivity'></n-input-number>
+					</n-form-item-gi>
+					<n-form-item-gi :span='8' label='Preset'>
+						<n-select
+							placeholder="Preset"
+							:options="txRxPresets"
+							@update:value="(val, option) => { editNode.txGain = option.settings[0]; editNode.rxSens = option.settings[1]; }">
+						</n-select>
+					</n-form-item-gi>
+				</n-grid>
+			</n-form>
+			<n-button v-if='showCreate' type='primary' @click='createNode'>Create Node</n-button>
+			<n-button v-if='showEdit' type='primary' @click='updateNode'>Update Node</n-button>
+		</div>
+	</vue-win-box>
+
+	<vue-win-box
+		ref='createMultipleWindow'
+		:options="{ title: '', class: ['white', 'no-min', 'no-max', 'no-full'], x: 'center', y: 'center', width: '800px', height: '360px', hidden: true, onclose: this.closeMultipleNode  }"
+	>
+		<div class='pa3'>
+			<n-form
+				ref='createMultipleNodeForm'
+				:model='createMultiple'
+				:rules='createMultipleRules'
+			>
+				<n-grid :span='24' :x-gap='10'>
+					<n-form-item-gi :span='24' label='Node ID Prefix' path='idPrefix'>
+						<n-input v-model:value='createMultiple.idPrefix' placeholder='Node ID Prefix'></n-input>
+					</n-form-item-gi>
+					<n-form-item-gi :span='24' label='Amount' path='amount'>
+						<n-input-number v-model:value='createMultiple.amount' :step='1' placeholder='Amount'></n-input-number>
+					</n-form-item-gi>
+					<n-form-item-gi :span='8' label='TX Antenna Gain' path='txGain'>
+						<n-input-number v-model:value='createMultiple.txGain' placeholder='TX Gain'></n-input-number>
+					</n-form-item-gi>
+					<n-form-item-gi :span='8' label='RX Antenna Sensitivity' path='rxSens'>
+						<n-input-number v-model:value='createMultiple.rxSens' placeholder='RX Sensitivity'></n-input-number>
+					</n-form-item-gi>
+					<n-form-item-gi :span='8' label='Preset'>
+						<n-select
+							placeholder="Preset"
+							:options="txRxPresets"
+							@update:value="(val, option) => { createMultiple.txGain = option.settings[0]; createMultiple.rxSens = option.settings[1]; }">
+						</n-select>
+					</n-form-item-gi>
+				</n-grid>
+			</n-form>
+			<n-button type='primary' @click='createMultipleNodes'>Create Nodes</n-button>
+		</div>
+	</vue-win-box>
+</div>
+
+<script type='module' src='./app/index.js'></script>
+</body>
+</html>

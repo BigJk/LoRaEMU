@@ -1,0 +1,89 @@
+body {
+    /* prevent ui framework to change these on body level */
+    font-size: initial !important;
+    line-height: initial !important;
+}
+
+.bg-dark-blue {
+    background-color: #023047;
+}
+
+.sending {
+    background-color: greenyellow !important;
+}
+
+.received {
+    background-color: greenyellow !important;
+}
+
+.collision {
+    background-color: red !important;
+}
+
+.selected {
+    box-shadow: inset 0 0 0 2px cornflowerblue;
+}
+
+.axis-grid line {
+    stroke: rgba(0, 0, 0, 0.1);
+}
+
+.axis-grid.background line {
+    stroke: rgba(0, 0, 0, 0.2);
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+/* json viewer styles */
+
+.jv-code {
+    padding: 3px !important;
+}
+
+/* winbox styles */
+
+.wb-header {
+    border-bottom: 2px solid lightgray;
+}
+
+.wb-refresh {
+    background-size: 17px auto;
+    filter: invert(100%);
+}
+
+.wb-back {
+    background-size: 17px auto;
+    filter: invert(100%);
+}
+
+.wb-next {
+    background-size: 17px auto;
+    filter: invert(100%);
+}
+
+.winbox.min {
+    box-shadow: none;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-top: none;
+    border-bottom: none;
+}
+
+.winbox.min:hover {
+    background-color: rgb(246, 246, 246);
+}
+
+.winbox.min .wb-header {
+    border-bottom: none;
+}
+
+.winbox {
+    z-index: 10;
+}
