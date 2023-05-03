@@ -43,6 +43,12 @@ The model tries to model how radio waves propagate and predicts the path loss ba
 
 If a node receives 2 or more packets at the same time this will result in a collision, which means packet decoding is not possible. The exception is the case of one signal being at least 6dBm stronger than all the other that are received at the time. LoRa can still decode this stronger packet successfully.
 
+## WebSocket API
+
+The core of LoRaEMU is the websocket interface. The interface enables external processes to take control of the transmissions of a LoRa node. If your applications want to take part it just needs to connect to the websocket route that matches the target node in the simulation. Any bytes it sends to the websocket will trigger a simulated transmission. If the node would receive any LoRa packets they are sent back over websocket in the form as a JSON RxPacket.
+
+![WebSocket Concept](./github/web_sendrecv.png)
+
 ## Building All
 
 To build LoRaEMU, it's utilities and the Frontend you need:

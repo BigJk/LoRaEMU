@@ -98,6 +98,27 @@ See the README.md in the frontend folder for more information.
 
 The webserver contains a frontend that shows a live view of the simulation and exposes a variety of API routes that can be used to fetch node content and dynamically change nodes.
 
+## Websocket
+
+The most important part about LoRaEMU is the websocket communication. If we want to send and receive LoRa packets from a certain node we need to connect to that node over websocket.
+
+
+### Node: ``(WS) /api/emu/:id``
+
+- Websocket connection for a given node id
+- If you want to send packets just send byte arrays
+- Received packets will be JSON encoded RxPackets
+
+**RxPacket**
+```json5
+{
+  "rssi": -29, // Signal strength that the antenna received the packet with
+  "snr": 0, // Signal-to-noise ratio from the node config
+  "data": "dGVzdA==", // Bas64 encoded packet data
+  "recvTime": 1670494949 // Unix timestamp of received time
+}
+```
+
 ## Live View
 
 To access the frontend open ``http://127.0.0.1:[PORT]``, where the port is specified by the value in the ``web`` field of the config.
@@ -139,24 +160,3 @@ To access the frontend open ``http://127.0.0.1:[PORT]``, where the port is speci
 ### Delete Node: ``(DELETE) /api/node/:id``
 
 - Deletes the node by id.
-
-## Websocket
-
-The most important part about LoRaEMU is the websocket communication. If we want to send and receive LoRa packets from a certain node we need to connect to that node over websocket.
-
-
-### Node: ``(WS) /api/emu/:id``
-
-- Websocket connection for a given node id
-- If you want to send packets just send byte arrays
-- Received packets will be JSON encoded RxPackets
-
-**RxPacket**
-```json5
-{
-  "rssi": -29, // Signal strength that the antenna received the packet with
-  "snr": 0, // Signal-to-noise ratio from the node config
-  "data": "dGVzdA==", // Bas64 encoded packet data
-  "recvTime": 1670494949 // Unix timestamp of received time
-}
-```
