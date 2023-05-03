@@ -1,5 +1,9 @@
 # LoRaEMU
 
+![Screenshot](./github/sim_screenshot.png)
+
+[![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://pkg.go.dev/github.com/BigJk/loraemu)
+
 LoRaEMU is a simple LoRa (not LoRaWAN) simulator written in go.
 
 The idea is that for each node (which represents some kind of LoRa device) in the simulation you can connect to that device over websocket. Packets that are sent to the websocket are treated as LoRa packets and handled in the simulator. Any packets that the node receives in the simulation will be sent back over websocket.
